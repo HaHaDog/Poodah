@@ -26,6 +26,7 @@
         <activity android:name="MainActivity"></activity>
         <service android:name="NetService"></service>
         <activity android:name="MenuActivity"></activity>
+        <activity android:name="SettingsActivity"></activity>
     </application>
 
 </manifest>

@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,7 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class ConnectActivity extends Activity {
-	private EditText address = null;
+	private String lastIp;
+	private String lastPort;
+	private EditText ipText = null;
+	private EditText portText = null;
 	private Button connect = null;
 	MyReceiver receiver;
 	@Override
@@ -21,16 +26,23 @@ public class ConnectActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		regist();
 		this.setContentView(R.layout.connect);
-		address = (EditText)findViewById(R.id.editText1);
+		ipText = (EditText)findViewById(R.id.editText1);
+		portText = (EditText)findViewById(R.id.editText2);
 		connect = (Button)findViewById(R.id.button1);
+		
+		// 显示上次连接的设置
+		init();
+		
 		connect.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent();
-				String addr = address.getText().toString();
-				sendMessage("address", addr);
-//				test();
+				String ip = ipText.getText().toString();
+				String port = portText.getText().toString();
+				sendMessage("address", ip+":"+port);
+				
+				//将连接设置到历史记录中
+				updateHistory();
 			}
 		});
 		
@@ -87,4 +99,21 @@ public class ConnectActivity extends Activity {
 		intent.setClass(ConnectActivity.this, MenuActivity.class);
 		startActivity(intent);
 	}
+	
+	public void init(){
+		SharedPreferences settings = getPreferences(0);
+		lastIp = settings.getString("lastip", "");
+		lastPort = settings.getString("lastport", "");
+		ipText.setText(lastIp);
+		portText.setText(lastPort);
+	}
+	
+	public void updateHistory(){
+		SharedPreferences settings = getPreferences(0);
+		Editor editor = settings.edit();
+		editor.putString("lastip", ipText.getText().toString());
+		editor.putString("lastport", portText.getText().toString());
+		editor.commit();
+	}
+	
 }

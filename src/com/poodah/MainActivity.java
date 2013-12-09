@@ -1,19 +1,13 @@
 package com.poodah;
 
-import java.io.IOException;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 @SuppressLint("ShowToast")
@@ -25,10 +19,6 @@ public class MainActivity extends Activity {
 	private PPTModeView pptModeView = null;
 	private PlayerModeView playerModeView = null;
 	private CustomModeView customModeView = null;
-	private static ButtonSettings buttonSettings = null;
-	private static String theme = null;
-	private WebView webView = null;
-	private static String fileName = "/mnt/sdcard/poodah.ini";
 	private String addr = null;
 	private String ip = null;
 	private int port = 0;
@@ -110,90 +100,13 @@ public class MainActivity extends Activity {
 		this.setContentView(customModeView);
 	}
 
-	@SuppressLint("SetJavaScriptEnabled")
-	public void gotoSettings() {
-		inMenu = false;
-		buttonSettings = getButtonSettings();
-		webView = new WebView(this);
-		this.setContentView(webView);
-		webView.getSettings().setJavaScriptEnabled(true);
-
-		class JSObject {
-			@JavascriptInterface
-			public void enable(String name) throws IOException {
-				if (name.equals("shock")) {
-					enableShock();
-				} else if (name.equals("sound")) {
-					enableSound();
-				}
-			}
-
-			@JavascriptInterface
-			public void disable(String name) throws IOException {
-				if (name.equals("shock")) {
-					disableShock();
-				} else if (name.equals("sound")) {
-					disableSound();
-				}
-			}
-
-			@JavascriptInterface
-			public void enableShock() throws IOException {
-				buttonSettings.hasShock = true;
-				writeToSettings();
-			}
-
-			@JavascriptInterface
-			public void disableShock() throws IOException {
-				buttonSettings.hasShock = false;
-				writeToSettings();
-			}
-
-			@JavascriptInterface
-			public void enableSound() throws IOException {
-				buttonSettings.hasSound = true;
-				writeToSettings();
-			}
-
-			@JavascriptInterface
-			public void disableSound() throws IOException {
-				buttonSettings.hasSound = false;
-				writeToSettings();
-			}
-
-			@JavascriptInterface
-			public void send(String msg) throws IOException {
-				activity.send(msg);
-			}
-
-			@JavascriptInterface
-			public boolean hasSound() {
-				return buttonSettings.hasSound;
-			}
-
-			@JavascriptInterface
-			public boolean hasShock() {
-				return buttonSettings.hasShock;
-			}
-
-			@JavascriptInterface
-			public String getTheme() {
-				return theme;
-			}
-
-			@JavascriptInterface
-			public void test(String msg) throws IOException {
-				send(msg);
-			}
-
-		}
-
-		webView.addJavascriptInterface(new JSObject(), "android");
-		webView.loadUrl("file:///android_asset/settings.html");
+	public void gotoSettings(){
+		gotoSettingsActivity();
 	}
-
 	public void gotoSettingsActivity() {
-		gotoSettings();
+		Intent intent = new Intent();
+		intent.setClass(MainActivity.this, SettingsActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
@@ -218,26 +131,6 @@ public class MainActivity extends Activity {
 			return true;
 	}
 
-	public void writeToSettings() {
-		if(buttonSettings == null){
-			buttonSettings = getButtonSettings();
-		}
-		SharedPreferences settings = getPreferences(0);
-		Editor editor = settings.edit();
-		editor.putBoolean("shock", buttonSettings.hasShock);
-		editor.putBoolean("sound", buttonSettings.hasSound);
-		editor.putString("theme", theme);
-		editor.commit();
-	}
-
-	public ButtonSettings getButtonSettings() {
-		buttonSettings = new ButtonSettings();
-		SharedPreferences settings = getPreferences(0);
-		buttonSettings.hasShock = settings.getBoolean("shock", true);
-		buttonSettings.hasSound = settings.getBoolean("sound", true);
-		theme = settings.getString("theme", "default");
-		return buttonSettings;
-	}
 
 	@Override
 	protected void onResume() {
