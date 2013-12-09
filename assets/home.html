@@ -1,0 +1,25 @@
+﻿<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<script src="builtins.js"></script>
+</head>
+<body>
+<div style="background:black;" >
+<h1 style='padding-top:4;padding-bottom:4;'>连接</h1>
+</div>
+<br/>
+<br/>
+<p><input id="addr" type="text" placeholder="请输入IP" ></p>
+<p><input type="button" value="连接" onclick="check()"></p>
+<script>
+var addr = document.getElementById("addr");
+addr.value = "192.168.137.1:5757"
+function check(){
+	android.checkAddr(addr.value);
+}
+function test(){
+	android.alert("Test");
+}
+</script>
+</body>
+</html>
