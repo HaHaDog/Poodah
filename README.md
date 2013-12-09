@@ -1,3 +1,3 @@
 Poodah
 ======
-This is an Android Project.
+This is an Android project.
