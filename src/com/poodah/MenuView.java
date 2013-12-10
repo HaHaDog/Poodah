@@ -159,32 +159,33 @@ public class MenuView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public boolean touchOnGame(float x, float y) {
-		bitmapRect.set(gameX, gameY, 
-				gameBmp.getWidth()+gameX, gameBmp.getHeight()+gameY);
-		return bitmapRect.contains((int)x, (int)y);
-		//return getDistance(x, y, gameX, gameY) < modeWidth/6;
+		bitmapRect.set(gameX, gameY, gameBmp.getWidth() + gameX,
+				gameBmp.getHeight() + gameY);
+		return bitmapRect.contains((int) x, (int) y);
+		// return getDistance(x, y, gameX, gameY) < modeWidth/6;
 	}
 
 	public boolean touchOnPpt(float x, float y) {
-		bitmapRect.set(pptX, pptY,
-				pptBmp.getWidth()+pptX, pptBmp.getHeight()+pptY);
+		bitmapRect.set(pptX, pptY, pptBmp.getWidth() + pptX, pptBmp.getHeight()
+				+ pptY);
 		return bitmapRect.contains((int) x, (int) y);
-		//return getDistance(x, y, pptX, pptY) < modeWidth/6;
+		// return getDistance(x, y, pptX, pptY) < modeWidth/6;
 	}
 
 	public boolean touchOnPlayer(float x, float y) {
-		Toast.makeText(this.getContext(), "touch on player", Toast.LENGTH_SHORT).show();
-		bitmapRect.set(playerX, playerY, 
-				mediaBmp.getWidth()+playerX, mediaBmp.getHeight()+playerY);
-		return bitmapRect.contains((int)x, (int)y);
-		//return getDistance(x, y, playerX, playerY) < modeWidth/6;
+		Toast.makeText(this.getContext(), "touch on player", Toast.LENGTH_SHORT)
+				.show();
+		bitmapRect.set(playerX, playerY, mediaBmp.getWidth() + playerX,
+				mediaBmp.getHeight() + playerY);
+		return bitmapRect.contains((int) x, (int) y);
+		// return getDistance(x, y, playerX, playerY) < modeWidth/6;
 	}
 
 	public boolean touchOnCustom(float x, float y) {
-		bitmapRect.set(customX, customY, 
-				customBmp.getWidth()+customX, customBmp.getHeight()+customY);
-		return bitmapRect.contains((int)x, (int)y);
-		//return getDistance(x, y, customX, customY) < modeWidth/6;
+		bitmapRect.set(customX, customY, customBmp.getWidth() + customX,
+				customBmp.getHeight() + customY);
+		return bitmapRect.contains((int) x, (int) y);
+		// return getDistance(x, y, customX, customY) < modeWidth/6;
 	}
 
 	@Override
@@ -220,25 +221,22 @@ public class MenuView extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-//		new Thread() {
+		new Thread() {
 //			int sleeptime = 50;
-//
-//			public void run() {
-//				while (isWaiting) {
-//					repaint();
-//					if (angle == 360)
-//						angle = 0;
-//					angle += 10;
-//					try {
-//						Thread.sleep(sleeptime);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					System.out.println("run");
+
+			public void run() {
+				repaint();
+//				if (angle == 360)
+//					angle = 0;
+//				angle += 10;
+//				try {
+//					Thread.sleep(sleeptime);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
 //				}
-//			}
-//		}.start();
-		repaint();
+//				System.out.println("run");
+			}
+		}.start();
 
 	}
 
@@ -262,7 +260,7 @@ public class MenuView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

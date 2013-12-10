@@ -1,7 +1,5 @@
 package com.poodah;
 
-import java.io.IOException;
-
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
