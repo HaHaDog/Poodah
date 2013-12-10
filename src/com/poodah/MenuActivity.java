@@ -58,8 +58,8 @@ public class MenuActivity extends Activity{
 
 	public void gotoSettingsActivity(){
 		Intent intent = new Intent();
-		intent.putExtra("target", "settings");
-		gotoMainActivity(intent);
+		intent.setClass(MenuActivity.this, SettingsActivity.class);
+		startActivity(intent);
 	}
 	
 	public void onResume(){

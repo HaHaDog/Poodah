@@ -2,7 +2,6 @@ package com.poodah;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -124,6 +123,10 @@ public class NetService extends Service {
 				return  super.onStartCommand(intent, flags, startId);
 			}
 			address = bundle.getString("address");
+			
+			if(address==null){
+				return super.onStartCommand(intent, flags, startId);
+			}
 			boolean flag = false;
 			
 			try {

@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/settings_bg"
+    android:gravity="left"
     android:orientation="vertical" >
 
     <TextView
@@ -14,7 +15,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="38dp"
         android:layout_marginTop="124dp"
-        android:text="按键震动" />
+        android:text="按键震动"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
 
     <CheckBox
         android:id="@+id/checkBox1"
@@ -30,6 +33,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/checkBox1"
-        android:layout_below="@+id/checkBox1" />
+        android:layout_below="@+id/checkBox1"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/CheckBox2"
+        android:layout_alignBottom="@+id/CheckBox2"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_marginTop="20dp"
+        android:text="按键声音"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignRight="@+id/CheckBox2"
+        android:layout_below="@+id/CheckBox2"
+        android:layout_marginTop="19dp"
+        android:background="@drawable/theme_btn" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_alignRight="@+id/button1"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/about_btn" />
 
 </RelativeLayout>

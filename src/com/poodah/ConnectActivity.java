@@ -19,6 +19,14 @@ public class ConnectActivity extends Activity {
 	private String lastPort;
 	private EditText ipText = null;
 	private EditText portText = null;
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Intent intent = new Intent();
+		intent.setClass(ConnectActivity.this,NetService.class);
+		stopService(intent);
+	}
+
 	private Button connect = null;
 	MyReceiver receiver;
 	@Override
@@ -32,6 +40,7 @@ public class ConnectActivity extends Activity {
 		
 		// 显示上次连接的设置
 		init();
+		startService();
 		
 		connect.setOnClickListener(new OnClickListener() {
 			
@@ -48,6 +57,12 @@ public class ConnectActivity extends Activity {
 		
 	}
 	
+	private void startService() {
+		Intent intent = new Intent();
+		intent.setClass(ConnectActivity.this, NetService.class);
+		startService(intent);
+	}
+
 	public void sendMessage(String name, String value){
 		Intent intent = new Intent();
 		intent.putExtra(name, value);

@@ -19,9 +19,6 @@ public class MainActivity extends Activity {
 	private PPTModeView pptModeView = null;
 	private PlayerModeView playerModeView = null;
 	private CustomModeView customModeView = null;
-	private String addr = null;
-	private String ip = null;
-	private int port = 0;
 	public static boolean isSending = false;
 	public static boolean isConnecting = false;
 	public static String msg = null;
