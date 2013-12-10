@@ -41,7 +41,8 @@ implements SurfaceHolder.Callback {
 	public Bitmap mLBBitmap;
 	public Bitmap mRBBitmap;
 	public Bitmap mBgBitmap;
-	
+	public SendThread mySendThread;
+	public boolean isExit;
 	public MyThread myThread;
 	public Paint paint = new Paint();
 	public GameModeView(MainActivity activity) {
@@ -56,6 +57,7 @@ implements SurfaceHolder.Callback {
 		mScreenHeight = dm.heightPixels;
 		System.out.print("width:"+mScreenWidth+"   height:"+mScreenHeight);
 		myThread = new MyThread(getHolder());
+		isExit = false;
 	}
 
 	@Override
@@ -72,23 +74,24 @@ implements SurfaceHolder.Callback {
 		MyOnClickListener myOnClickListener = new MyOnClickListener();
 		setOnTouchListener(myOnClickListener);
 		myThread.start();
+		mySendThread = new SendThread();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
-		
+		isExit = true;
 	}
 	public void InitButtonsPosition(){
 		int x,y;
 		y = mScreenHeight;
 		x = mScreenWidth;
-		centerOfDirection.set(x/2, y*2/7);
-		centerOfABXY.set(x/2, y*3/4);
-		mRadiusOfDirection = x/4;
-		mRadiusOfABXY = x/12;
-		leftButtonRect.set(x*4/5, 0, x, y/3);
-		rightButtonRect.set(x*4/5, y*2/3, x, y);
+		centerOfDirection.set(x*20/48, y*154/800);
+		centerOfABXY.set(x/2, y*63/80);
+		mRadiusOfDirection = (int) (x*0.3);
+		mRadiusOfABXY = x/8;
+		leftButtonRect.set(x*385/480, y*25/800, x*47/48, y*19/80);
+		rightButtonRect.set(x*385/480, y*61/80, x*47/48, y*775/800);
 		centerOfA.x = centerOfABXY.x - mRadiusOfABXY*2;
 		centerOfA.y = centerOfABXY.y;
 		centerOfY.x = centerOfABXY.x + mRadiusOfABXY*2;
@@ -128,14 +131,7 @@ implements SurfaceHolder.Callback {
 		canvas.drawRect(0, 0, mScreenWidth, mScreenHeight, paint);
 		paint.setColor(Color.GRAY);
 		paint.setAntiAlias(true);
-		/*canvas.drawCircle(centerOfDirection.x, centerOfDirection.y, 
-				mRadiusOfDirection, paint);
-		canvas.drawRect(leftButtonRect, paint);
-		canvas.drawRect(rightButtonRect, paint);
-		canvas.drawCircle(centerOfA.x, centerOfA.y, mRadiusOfABXY, paint);
-		canvas.drawCircle(centerOfB.x, centerOfB.y, mRadiusOfABXY, paint);
-		canvas.drawCircle(centerOfX.x, centerOfX.y, mRadiusOfABXY, paint);
-		canvas.drawCircle(centerOfY.x, centerOfY.y, mRadiusOfABXY, paint);*/
+		
 		canvas.drawBitmap(mBgBitmap, null,
 				new Rect(0, 0, mScreenWidth, mScreenHeight), paint);
 		canvas.drawBitmap(mDirectionsBitmap, null,
@@ -174,23 +170,12 @@ implements SurfaceHolder.Callback {
 	class MyOnClickListener implements OnTouchListener{
 
 		
-		public SendThread mySendThread = new SendThread();
+		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			// TODO Auto-generated method stub
 			if(mySendThread.isAlive() == false){
 				mySendThread.start();
-				/*System.out.println("mySendThread.start()");
-				
-				try {
-					System.out.println("ready to mySendThread.wait()");
-					mySendThread.wait();
-					System.out.println("end of mySendThread.wait()");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-
 			}
 			if(event.getAction() == MotionEvent.ACTION_UP){
 				System.out.println("end");
@@ -209,91 +194,41 @@ implements SurfaceHolder.Callback {
 						(y-centerOfDirection.y)*(y-centerOfDirection.y);
 				r = (float) Math.sqrt(r);
 				sinX = (y-centerOfDirection.y)/r;
+				
 				if (sinX>Math.sqrt(2)/2) {
-					/*while(event.getAction() != MotionEvent.ACTION_UP){
-						try {
-							activity.send("68");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						System.out.println("ср:68");
-					}*/
-					//if(event.getActionMasked() != MotionEvent.ACTION_UP){
-						System.out.println(sendMsg);
-						sendMsg = "68";
-						isSend = true;
-						synchronized (mySendThread) {
-							mySendThread.notify();
-						}
-					//}
-					//else{
-					//	isSend = false;
-					//}
+					System.out.println(sendMsg);
+					sendMsg = "68";
+					isSend = true;
+					synchronized (mySendThread) {
+						mySendThread.notify();
+					}
 				}
 				else if(dx<0&&sinX<Math.sqrt(2)/2&&sinX>-Math.sqrt(2)/2){
-					/*while(event.getAction() != MotionEvent.ACTION_UP){
-						try {
-							activity.send("83");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						System.out.println("об:83");
-					}*/
-					//if(event.getActionMasked() != MotionEvent.ACTION_UP){
-						sendMsg = "83";
-						isSend = true;
-						synchronized (mySendThread) {
-							mySendThread.notify();
-						}
-					//}
-					//else{
-					//	isSend = false;
-					//}
+					
+					sendMsg = "83";
+					isSend = true;
+					synchronized (mySendThread) {
+						mySendThread.notify();
+					}
 				}
 				else if(sinX<-Math.sqrt(2)/2){
-					/*while(event.getAction() != MotionEvent.ACTION_UP){
-						try {
-							activity.send("65");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						System.out.println("вС:65");
-					}*/
-					//if(event.getAction() != MotionEvent.ACTION_UP){
-						sendMsg = "65";
-						isSend = true;
-						synchronized (mySendThread) {
-							mySendThread.notify();
-						}
-					//}
-					//else{
-					//	isSend = false;
-					//}
+					sendMsg = "65";
+					isSend = true;
+					synchronized (mySendThread) {
+						mySendThread.notify();
+					}
 				}
 				else if(dx>0&&sinX<Math.sqrt(2)/2&&sinX>-Math.sqrt(2)/2){
-					/*while(event.getAction() != MotionEvent.ACTION_UP){
-						try {
-							activity.send("87");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						System.out.println("ио:87");
-					}*/
-					//if(event.getAction() != MotionEvent.ACTION_UP){
-						sendMsg = "87";
-						isSend = true;
-						synchronized (mySendThread) {
-							mySendThread.notify();
-						}
-					//}
-					//else{
-					//	isSend = false;
-					//}
+					
+					sendMsg = "87";
+					isSend = true;
+					synchronized (mySendThread) {
+						mySendThread.notify();
+					}
 				}
+			}
+			else if(event.getAction() == MotionEvent.ACTION_MOVE){
+				return true;
 			}
 			else if(isInCircle(centerOfA, mRadiusOfABXY, x, y)){
 				activity.send("73");
@@ -329,7 +264,7 @@ implements SurfaceHolder.Callback {
 	
 	class SendThread extends Thread{
 		public void run(){
-			while(true){
+			while(!isExit){
 				if(isSend == false){
 					synchronized (Thread.currentThread()) {
 						try {

@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -49,24 +48,24 @@ public class PPTModeView extends SurfaceView
 		mScreenWidth = dm.widthPixels;
 		mScreenHeight = dm.heightPixels;
 		
-		BitmapFactory.Options opts = new BitmapFactory.Options();
-		opts.inDensity = dm.densityDpi;
-		opts.inTargetDensity = dm.densityDpi;
-		mNextBitmap = BitmapFactory.decodeResource(
+		//BitmapFactory.Options opts = new BitmapFactory.Options();
+		//opts.inDensity = dm.densityDpi;
+		//opts.inTargetDensity = dm.densityDpi;
+		/*mNextBitmap = BitmapFactory.decodeResource(
 				getResources(), R.drawable.ppt_next, opts);
 		mPrevBitmap = BitmapFactory.decodeResource(
 				getResources(), R.drawable.ppt_prev, opts);
 		mEndBitmap = BitmapFactory.decodeResource(
 				getResources(), R.drawable.ppt_stop, opts);
 		mF5Bitmap = BitmapFactory.decodeResource(
-				getResources(), R.drawable.ppt_start, opts);
+				getResources(), R.drawable.ppt_start, opts);*/
 		mBackgroundBitmap = BitmapFactory.decodeResource(
-				getResources(), R.drawable.ppt_bg, opts);
+				getResources(), R.drawable.ppt_bg);
 		
-		mF5Rect.set(0,0,mScreenHeight/10, mScreenHeight/10);
-		mEndRect.set(mScreenWidth-mScreenHeight/10, 0, mScreenWidth, mScreenHeight/10);
-		mNextRect.set(0, mScreenHeight/15, mScreenWidth, mScreenHeight/2);
-		mPrevRect.set(0, mScreenHeight/2, mScreenWidth, mScreenHeight);
+		mF5Rect.set(0,0,mScreenWidth/2, mScreenHeight*150/800);
+		mEndRect.set(mScreenWidth/2, 0, mScreenWidth, mScreenHeight*150/800);
+		mNextRect.set(0, mScreenHeight*150/800, mScreenWidth, mScreenHeight*455/800);
+		mPrevRect.set(0, mScreenHeight*455/800, mScreenWidth, mScreenHeight);
 	}
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -76,7 +75,7 @@ public class PPTModeView extends SurfaceView
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		activity.getWindow().setFormat(PixelFormat.RGBA_8888);
+		//activity.getWindow().setFormat(PixelFormat.RGBA_8888);
 		MyOnClickListener myOnClickListener = new MyOnClickListener();
 		setOnTouchListener(myOnClickListener);
 		myThread.start();
@@ -87,26 +86,36 @@ public class PPTModeView extends SurfaceView
 		super.draw(canvas);
 		
 		paint.setColor(Color.WHITE);
-		canvas.drawRect(0, 0, mScreenWidth, mScreenHeight, paint);
-		/*canvas.drawBitmap(mNextBitmap, null, mNextRect, paint);
-		canvas.drawBitmap(mPrevBitmap, null, mPrevRect, paint);
-		canvas.drawBitmap(mEndBitmap, null, mEndRect, paint);
-		*/
+		//canvas.drawRect(0, 0, mScreenWidth, mScreenHeight, paint);
 		paint.setAntiAlias(true);
-		paint.setColor(Color.CYAN);
-		canvas.drawRect(mF5Rect, paint);
-		paint.setColor(Color.YELLOW);
-		canvas.drawRect(mEndRect, paint);
-		paint.setColor(Color.GRAY);
-		canvas.drawRect(mNextRect, paint);
-		paint.setColor(Color.DKGRAY);
-		canvas.drawRect(mPrevRect, paint);
-		canvas.drawBitmap(mBackgroundBitmap, null, 
+		//paint.setColor(Color.CYAN);
+		//canvas.drawRect(mF5Rect, paint);
+		//paint.setColor(Color.YELLOW);
+		//canvas.drawRect(mEndRect, paint);
+		//paint.setColor(Color.GRAY);
+		//canvas.drawRect(mNextRect, paint);
+		//paint.setColor(Color.DKGRAY);
+		//canvas.drawRect(mPrevRect, paint);
+		/*canvas.drawBitmap(mBackgroundBitmap, null, 
 				new Rect(0, 0, mScreenWidth, mScreenHeight), paint);
 		canvas.drawBitmap(mF5Bitmap, null, mF5Rect, paint);
 		canvas.drawBitmap(mEndBitmap, null, mEndRect, paint);
 		canvas.drawBitmap(mNextBitmap, null, mNextRect, paint);
-		canvas.drawBitmap(mPrevBitmap, null, mPrevRect, paint);
+		canvas.drawBitmap(mPrevBitmap, null, mPrevRect, paint);*/
+		canvas.drawBitmap(mBackgroundBitmap, null, 
+				new Rect(0, 0, mScreenWidth, mScreenHeight), paint);
+		/*canvas.drawBitmap(mF5Bitmap, null, mF5Rect, paint);
+		canvas.drawBitmap(mEndBitmap, null, mEndRect, paint);
+		
+		Rect rect = new Rect();
+		rect.left = mScreenWidth/2 - 64;
+		rect.right = rect.left + 128;
+		rect.top = mScreenHeight/4;
+		rect.bottom = rect.top + 128;
+		canvas.drawBitmap(mNextBitmap, null, rect, paint);
+		rect.top = mScreenHeight*2/3;
+		rect.bottom = rect.top + 128;
+		canvas.drawBitmap(mPrevBitmap, null, rect, paint);*/
 	}
 
 	@Override

@@ -16,48 +16,77 @@ import android.view.View;
 @SuppressLint("ViewConstructor")
 public class PlayerModeView extends SurfaceView
 implements SurfaceHolder.Callback {
-
 	public int mScreenWidth;
 	public int mScreenHeight;
 	public MainActivity activity;
 	
 	public boolean bPlay;
+	public boolean bWithSound;
 	public boolean bFullScreen;
 	public Rect mPlayRect = new Rect();
 	public Rect mNextRect = new Rect();
 	public Rect mPrevRect = new Rect();
 	public Rect mFullScreenRect = new Rect();
 	public VolumeBar volumeBar = new VolumeBar();
+	public Rect mVolumeIconRect = new Rect();
 	
 	public Bitmap mPlayBitmap;
+	public Bitmap mPauseBitmap;
+	public Bitmap mPlayIconBitmap;
 	public Bitmap mNextBitmap;
 	public Bitmap mPrevBitmap;
 	public Bitmap mFullScreenBitmap;
 	public Bitmap mBgBitmap;
+	public Bitmap mVolumeIconBitmap;
+	public Bitmap mVolumeOnBitmap;
+	public Bitmap mVolumeOffBitmap;
 	
 	public MyThread myThread;
 	public void InitRects(){
-		mPlayRect.set(mScreenWidth*7/24, mScreenHeight/3,
-				mScreenWidth*17/24, mScreenHeight*7/12);
+		/*mPlayRect.set(mScreenWidth*7/24, mScreenHeight/2,
+				mScreenWidth*17/24, mScreenHeight*3/4);
 		mPrevRect.set(mPlayRect);
 		mPrevRect.left = mScreenWidth/25;
-		mPrevRect.top = mScreenHeight/2;
+		mPrevRect.top = mScreenHeight*2/3;
 		mPrevRect.right = mScreenWidth*9/50;
 		mNextRect.set(mPlayRect);
 		mNextRect.left = mScreenWidth*41/50;
-		mNextRect.top = mScreenHeight/2;
+		mNextRect.top = mScreenHeight*2/3;
 		mNextRect.right = mScreenWidth*24/25;
-		volumeBar.setPosition(mScreenWidth/25, mScreenHeight*11/18,
-				mScreenWidth*21/25, mScreenHeight*2/3);
-		volumeBar.setCurrentVolume(50);
-		mFullScreenRect.set(mScreenWidth*22/25, mScreenHeight*11/18,
-				mScreenWidth*24/25, mScreenHeight*2/3);
 		
+		mVolumeIconRect.set(mScreenWidth/25, mScreenHeight/4-64,
+				mScreenWidth/25+32, mScreenHeight/4-32);
+		volumeBar.setPosition(mScreenWidth*3/25, mScreenHeight/4-56,
+				mScreenWidth*24/25, mScreenHeight/4-40);
+		volumeBar.setCurrentVolume(50);
+		mFullScreenRect.set(mScreenWidth*24/25-64, mScreenHeight/18,
+				mScreenWidth*24/25, mScreenHeight/18+64);
+		*/
+		mPlayRect.set(mScreenWidth*14/48, mScreenHeight*35/80, 
+				mScreenWidth*35/48, mScreenHeight*56/80);
+		mPrevRect.set(mScreenWidth*35/480, mScreenHeight*545/800, 
+				mScreenWidth*12/48, mScreenHeight*635/800);
+		mNextRect.set(mScreenWidth*36/48, mScreenHeight*545/800,
+				mScreenWidth*445/480, mScreenHeight*635/800);
+		mFullScreenRect.set(mScreenWidth*30/48, mScreenHeight*1/8, 
+				mScreenWidth*47/48, mScreenHeight*28/80);
+		mVolumeIconRect.set(mScreenWidth*35/480, mScreenHeight*68/80, 
+				mScreenWidth*11/48, mScreenHeight*76/80);
+		volumeBar.setPosition(mScreenWidth*145/480, mScreenHeight*705/800, 
+				mScreenWidth*45/48, mScreenHeight*735/800);
+		mVolumeOnBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_volume);
+		mVolumeOffBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_stop_volume);
+		//mVolumeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_volume);
 		mBgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_bg);
-		mFullScreenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_escape);
+		
+		//mFullScreenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_escape);
 		mNextBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_next);
 		mPrevBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_prev);
 		mPlayBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_play);
+		mPauseBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_pause);
+		
+		mPlayIconBitmap = mPlayBitmap;
+		mVolumeIconBitmap = mVolumeOnBitmap;
 	}
 	public PlayerModeView(MainActivity activity) {
 		super(activity);
@@ -69,6 +98,7 @@ implements SurfaceHolder.Callback {
 		mScreenHeight = dm.heightPixels;
 		bPlay = false;
 		bFullScreen = false;
+		bWithSound = true;
 		myThread = new MyThread(getHolder());
 	}
 
@@ -99,21 +129,19 @@ implements SurfaceHolder.Callback {
 		// TODO Auto-generated method stub
 		super.draw(canvas);
 		Paint paint = new Paint();
-		//paint.setColor(Color.GRAY);
-		//canvas.drawRect(mPlayRect, paint);
-		//canvas.drawRect(mPrevRect, paint);
-		//canvas.drawRect(mNextRect, paint);
+
 		canvas.drawBitmap(mBgBitmap, null, new Rect(0,0, mScreenWidth,mScreenHeight), paint);
-		canvas.drawBitmap(mPlayBitmap, null, mPlayRect, paint);
+		canvas.drawBitmap(mPlayIconBitmap, null, mPlayRect, paint);
 		canvas.drawBitmap(mPrevBitmap, null, mPrevRect, paint);
 		canvas.drawBitmap(mNextBitmap, null, mNextRect, paint);
+		canvas.drawBitmap(mVolumeIconBitmap, null, mVolumeIconRect, paint);
 		//canvas.drawBitmap(mFullScreenBitmap, null, mFullScreenRect, paint);
 		paint.setColor(Color.DKGRAY);
 		canvas.drawRect(volumeBar.mPosition, paint);
 		paint.setColor(Color.GRAY);
 		canvas.drawRect(volumeBar.mCurrentVolumeRect, paint);
-		canvas.drawRect(mFullScreenRect, paint);
 		//canvas.drawRect(mFullScreenRect, paint);
+		//canvas.drawBitmap(mFullScreenBitmap, null, mFullScreenRect, paint);
 	}
 	class MyThread extends Thread{
 		public SurfaceHolder holder;
@@ -180,11 +208,11 @@ implements SurfaceHolder.Callback {
 			if(mPlayRect.contains(x, y) && funcChosen!=2){
 				activity.send("32");
 				if(bPlay == false){
-					mPlayBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_pause);
+					mPlayIconBitmap = mPauseBitmap;
 					System.out.println("≤•∑≈:32");
 				}
 				else{
-					mPlayBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.player_play);
+					mPlayIconBitmap = mPlayBitmap;
 					System.out.println("‘›Õ£:32");
 				}
 				bPlay = !bPlay;
@@ -214,21 +242,40 @@ implements SurfaceHolder.Callback {
 			}
 			else if(volumeBar.mPosition.contains(x, y) && funcChosen != 2){
 				//volumeBar.setVolume(y);
+				mVolumeIconBitmap = mVolumeOnBitmap;
 				int iv = x - volumeBar.mPosition.left;
 				if(iv>volumeBar.mPosition.width())
 					iv = 100;
-				if(iv<0)
+				if(iv<=0){
 					iv = 0;
+					mVolumeIconBitmap = mVolumeOffBitmap;
+				}
 				int dv = iv - volumeBar.mCurrentVolume;
 				for(int i=0; i<Math.abs(dv); i+=2){
 					if(dv<0)
 						activity.send("22");
 					else if(dv>0)
 						activity.send("21");
+					else {
+						break;
+					}
 				}
-				volumeBar.setVolume(x);
+				volumeBar.setVolume(x+dv/Math.abs(dv));
 				System.out.println("“Ù¡ø£∫"+volumeBar.mCurrentVolume);
 				returnValue = true;
+				funcChosen = 1;
+			}
+			else if(mVolumeIconRect.contains(x, y) && funcChosen!=2){
+				activity.send("23");
+				if(bWithSound){
+					mVolumeIconBitmap = mVolumeOffBitmap;
+					volumeBar.setCurrentVolume(0);
+				}
+				else{
+					mVolumeIconBitmap = mVolumeOnBitmap;
+					volumeBar.setCurrentVolume(volumeBar.mLastVolume);
+				}
+				bWithSound = !bWithSound;
 				funcChosen = 1;
 			}
 			else{
@@ -249,10 +296,12 @@ implements SurfaceHolder.Callback {
 		public Rect mCurrentVolumeRect = new Rect();
 		public int max;
 		public int mCurrentVolume;
+		public int mLastVolume;
 		public VolumeBar(){
 			max = 100;
 		}
 		public void setCurrentVolume(int volume){
+			mLastVolume = mCurrentVolume;
 			mCurrentVolume = volume;
 			mCurrentVolumeRect.set(mPosition);
 			mCurrentVolumeRect.right = mCurrentVolumeRect.left + 
@@ -265,6 +314,7 @@ implements SurfaceHolder.Callback {
 				x = mPosition.left;
 			mCurrentVolumeRect.right = x;
 			x = x - mPosition.left;
+			mLastVolume = mCurrentVolume;
 			mCurrentVolume = (int)(((float)x)/((float)mPosition.width())*100);
 		}
 		public void setPosition(int left, int top, int right, int bottom){

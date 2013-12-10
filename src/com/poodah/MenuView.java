@@ -173,8 +173,8 @@ public class MenuView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public boolean touchOnPlayer(float x, float y) {
-		Toast.makeText(this.getContext(), "touch on player", Toast.LENGTH_SHORT)
-				.show();
+//		Toast.makeText(this.getContext(), "touch on player", Toast.LENGTH_SHORT)
+//				.show();
 		bitmapRect.set(playerX, playerY, mediaBmp.getWidth() + playerX,
 				mediaBmp.getHeight() + playerY);
 		return bitmapRect.contains((int) x, (int) y);
@@ -222,19 +222,19 @@ public class MenuView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		new Thread() {
-//			int sleeptime = 50;
+			int sleeptime = 50;
 
 			public void run() {
 				repaint();
-//				if (angle == 360)
-//					angle = 0;
-//				angle += 10;
-//				try {
-//					Thread.sleep(sleeptime);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				System.out.println("run");
+				if (angle == 360)
+					angle = 0;
+				angle += 10;
+				try {
+					Thread.sleep(sleeptime);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println("run");
 			}
 		}.start();
 
