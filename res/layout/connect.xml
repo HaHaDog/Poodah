@@ -15,14 +15,14 @@
         android:ems="10"
         android:hint="请输入IP地址" />
 
-    <Button
+    <ImageButton
         android:id="@+id/themeBtn"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="216dp"
-        android:background="@drawable/connect_btn" />
+        android:background="@drawable/connect_btn_ic" />
 
     <EditText
         android:id="@+id/editText2"

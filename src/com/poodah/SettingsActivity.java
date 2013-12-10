@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
 
 public class SettingsActivity extends Activity {
 
@@ -20,8 +19,8 @@ public class SettingsActivity extends Activity {
 	private String theme = null;
 	private CheckBox shock;
 	private CheckBox sound;
-	private Button themeBtn = null;
-	private Button aboutBtn = null;
+	private ImageButton themeBtn = null;
+	private ImageButton aboutBtn = null;
 	public SettingsActivity() {
 		// TODO Auto-generated constructor stub
 	}
@@ -34,41 +33,41 @@ public class SettingsActivity extends Activity {
 		getButtonSettings();
 		shock = (CheckBox)findViewById(R.id.checkBox1);
 		sound = (CheckBox)findViewById(R.id.CheckBox2);
-		themeBtn = (Button)findViewById(R.id.themeBtn);
-		aboutBtn = (Button)findViewById(R.id.aboutBtn);
+		themeBtn = (ImageButton)findViewById(R.id.themeBtn);
+		aboutBtn = (ImageButton)findViewById(R.id.aboutBtn);
 		initSettings();
 		
-		themeBtn.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch(event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-					themeBtn.setBackground(getResources().getDrawable(R.drawable.theme_btn_press));
-					break;
-				case MotionEvent.ACTION_UP:
-					themeBtn.setBackground(getResources().getDrawable(R.drawable.theme_btn));
-					break;
-				}
-				return false;
-			}
-		});
-		
-		aboutBtn.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch(event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-					aboutBtn.setBackground(getResources().getDrawable(R.drawable.about_btn_press));
-					break;
-				case MotionEvent.ACTION_UP:
-					aboutBtn.setBackground(getResources().getDrawable(R.drawable.about_btn));
-					break;
-				}
-				return false;
-			}
-		});
+//		themeBtn.setOnTouchListener(new OnTouchListener() {
+//			
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				switch(event.getAction()){
+//				case MotionEvent.ACTION_DOWN:
+//					themeBtn.setBackground(getResources().getDrawable(R.drawable.theme_btn_press));
+//					break;
+//				case MotionEvent.ACTION_UP:
+//					themeBtn.setBackground(getResources().getDrawable(R.drawable.theme_btn));
+//					break;
+//				}
+//				return false;
+//			}
+//		});
+//		
+//		aboutBtn.setOnTouchListener(new OnTouchListener() {
+//			
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				switch(event.getAction()){
+//				case MotionEvent.ACTION_DOWN:
+//					aboutBtn.setBackground(getResources().getDrawable(R.drawable.about_btn_press));
+//					break;
+//				case MotionEvent.ACTION_UP:
+//					aboutBtn.setBackground(getResources().getDrawable(R.drawable.about_btn));
+//					break;
+//				}
+//				return false;
+//			}
+//		});
 		shock.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override

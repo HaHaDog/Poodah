@@ -48,7 +48,7 @@
         android:textColor="#ffffff"
         android:textSize="20sp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/themeBtn"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
@@ -56,9 +56,9 @@
         android:layout_alignRight="@+id/CheckBox2"
         android:layout_below="@+id/CheckBox2"
         android:layout_marginTop="19dp"
-        android:background="@drawable/theme_btn" />
+        android:background="@drawable/theme_btn_ic" />
 
-    <Button
+    <ImageButton
         android:id="@+id/aboutBtn"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
@@ -66,6 +66,6 @@
         android:layout_alignRight="@+id/themeBtn"
         android:layout_below="@+id/themeBtn"
         android:layout_marginTop="18dp"
-        android:background="@drawable/about_btn" />
+        android:background="@drawable/about_btn_ic" />
 
 </RelativeLayout>

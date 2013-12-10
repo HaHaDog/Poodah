@@ -9,12 +9,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class ConnectActivity extends Activity {
 	private String lastIp;
@@ -29,7 +27,7 @@ public class ConnectActivity extends Activity {
 		stopService(intent);
 	}
 
-	private Button connect = null;
+	private ImageButton connect = null;
 	MyReceiver receiver;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +36,28 @@ public class ConnectActivity extends Activity {
 		this.setContentView(R.layout.connect);
 		ipText = (EditText)findViewById(R.id.editText1);
 		portText = (EditText)findViewById(R.id.editText2);
-		connect = (Button)findViewById(R.id.themeBtn);
+		connect = (ImageButton)findViewById(R.id.themeBtn);
 		
 		// 显示上次连接的设置
 		init();
 //		startService();
 		
-		connect.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch(event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-					connect.setBackground(getResources().getDrawable(R.drawable.connect_btn_press));
-					break;
-				case MotionEvent.ACTION_UP:
-					connect.setBackground(getResources().getDrawable(R.drawable.connect_btn));
-					break;
-				}
-				return false;
-			}
-		});
-		
+//		connect.setOnTouchListener(new OnTouchListener() {
+//			
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				switch(event.getAction()){
+//				case MotionEvent.ACTION_DOWN:
+//					connect.setBackground(getResources().getDrawable(R.drawable.connect_btn_press));
+//					break;
+//				case MotionEvent.ACTION_UP:
+//					connect.setBackground(getResources().getDrawable(R.drawable.connect_btn));
+//					break;
+//				}
+//				return false;
+//			}
+//		});
+//		
 		connect.setOnClickListener(new OnClickListener() {
 			
 			@Override
