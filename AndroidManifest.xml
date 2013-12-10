@@ -27,6 +27,8 @@
         <service android:name="NetService"></service>
         <activity android:name="MenuActivity"></activity>
         <activity android:name="SettingsActivity"></activity>
+        <activity android:name="AboutActivity"></activity>
+        <activity android:name="ThemeActivity"></activity>
     </application>
 
 </manifest>

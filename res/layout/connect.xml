@@ -16,19 +16,19 @@
         android:hint="请输入IP地址" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/themeBtn"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="216dp"
-        android:text="连接" />
+        android:background="@drawable/connect_btn" />
 
     <EditText
         android:id="@+id/editText2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button1"
+        android:layout_alignBottom="@+id/themeBtn"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="63dp"
         android:ems="10"
