@@ -5,6 +5,7 @@
 *.pydevproject
 .project
 .metadata
+*.psd
 bin/
 tmp/
 *.tmp
