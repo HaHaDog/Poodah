@@ -22,9 +22,9 @@ public class ConnectActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-//		Intent intent = new Intent();
-//		intent.setClass(ConnectActivity.this,NetService.class);
-//		stopService(intent);
+		Intent intent = new Intent();
+		intent.setClass(ConnectActivity.this,NetService.class);
+		stopService(intent);
 	}
 
 	private ImageButton connect = null;
@@ -59,7 +59,7 @@ public class ConnectActivity extends Activity {
 		});
 		
 	}
-	
+
 	public void sendMessage(String name, String value){
 		Intent intent = new Intent();
 		intent.putExtra("action", "connect");
