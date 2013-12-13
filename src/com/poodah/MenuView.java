@@ -221,26 +221,15 @@ public class MenuView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		new Thread() {
-			int sleeptime = 50;
-
 			public void run() {
 				repaint();
-				if (angle == 360)
-					angle = 0;
-				angle += 10;
-				try {
-					Thread.sleep(sleeptime);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				System.out.println("run");
 			}
 		}.start();
 
 	}
 
 	@SuppressLint("WrongCall")
-	private void repaint() {
+	public void repaint() {
 		SurfaceHolder mHolder = this.getHolder();
 		Canvas canvas = mHolder.lockCanvas();
 		try {

@@ -22,9 +22,9 @@ public class ConnectActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Intent intent = new Intent();
-		intent.setClass(ConnectActivity.this,NetService.class);
-		stopService(intent);
+//		Intent intent = new Intent();
+//		intent.setClass(ConnectActivity.this,NetService.class);
+//		stopService(intent);
 	}
 
 	private ImageButton connect = null;
@@ -40,31 +40,18 @@ public class ConnectActivity extends Activity {
 		
 		// 显示上次连接的设置
 		init();
-//		startService();
-		
-//		connect.setOnTouchListener(new OnTouchListener() {
-//			
-//			@Override
-//			public boolean onTouch(View v, MotionEvent event) {
-//				switch(event.getAction()){
-//				case MotionEvent.ACTION_DOWN:
-//					connect.setBackground(getResources().getDrawable(R.drawable.connect_btn_press));
-//					break;
-//				case MotionEvent.ACTION_UP:
-//					connect.setBackground(getResources().getDrawable(R.drawable.connect_btn));
-//					break;
-//				}
-//				return false;
-//			}
-//		});
-//		
 		connect.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				String ip = ipText.getText().toString();
 				String port = portText.getText().toString();
-				sendMessage("address", ip+":"+port);
+				Intent intent = new Intent();
+				intent.putExtra("action", "connect");
+				intent.putExtra("ip", ip);
+				intent.putExtra("port", Integer.parseInt(port));
+				intent.setClass(ConnectActivity.this, NetService.class);
+				startService(intent);
 				
 				//将连接设置到历史记录中
 				updateHistory();
@@ -73,14 +60,9 @@ public class ConnectActivity extends Activity {
 		
 	}
 	
-	private void startService() {
-		Intent intent = new Intent();
-		intent.setClass(ConnectActivity.this, NetService.class);
-		startService(intent);
-	}
-
 	public void sendMessage(String name, String value){
 		Intent intent = new Intent();
+		intent.putExtra("action", "connect");
 		intent.putExtra(name, value);
 		intent.setClass(ConnectActivity.this, NetService.class);
 		startService(intent);
@@ -113,17 +95,26 @@ public class ConnectActivity extends Activity {
             
             Bundle bundle = intent.getExtras();
             String connect = bundle.getString("connect");
-            if(connect.equals("success")){
+            if(connect != null && connect.equals("success")){
             	Intent intent1 = new Intent();
             	intent1.setClass(ConnectActivity.this, MenuActivity.class);
             	startActivity(intent1);
             }else{
             	String error = bundle.getString("error");
+//            	gotoMenu();
             	alert(error);
-            	
+//            	Intent intent2 = new Intent();
+//            	intent.setClass(ConnectActivity.this, SettingsActivity.class);
+//            	startActivity(intent2);
             }
         } 
     }
+	
+	public void gotoMenu(){
+		Intent intent = new Intent();
+		intent.setClass(ConnectActivity.this, MenuActivity.class);
+		startActivity(intent);
+	}
 	public void test(){
 		Intent intent = new Intent();
 		intent.putExtra("target", "settings");

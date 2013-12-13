@@ -31,6 +31,7 @@
         android:layout_alignBottom="@+id/themeBtn"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="63dp"
+        android:inputType="number"
         android:ems="10"
         android:hint="请输入端口号" >
 

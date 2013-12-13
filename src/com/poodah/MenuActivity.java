@@ -10,6 +10,7 @@ import android.view.WindowManager;
 public class MenuActivity extends Activity{
 
 	private DisplayMetrics displayMetrics;
+	private MenuView menuView = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,8 @@ public class MenuActivity extends Activity{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
-		this.setContentView(new MenuView(this));
+		menuView = new MenuView(this);
+		this.setContentView(menuView);
 	}
 	
 	public void gotoMainActivity(Intent intent){
@@ -64,6 +66,12 @@ public class MenuActivity extends Activity{
 	
 	public void onResume(){
 		super.onResume();
-		setContentView(new MenuView(this));
+		if(menuView == null){
+			menuView = new MenuView(this);
+			setContentView(menuView);
+		}else{
+			menuView.repaint();
+		}
+		
 	}
 }

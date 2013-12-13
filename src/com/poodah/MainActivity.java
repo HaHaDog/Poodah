@@ -122,7 +122,8 @@ public class MainActivity extends Activity {
 
 	public boolean send(String msg){
 			Intent intent = new Intent();
-			intent.putExtra("key", msg);
+			intent.putExtra("action", "command");
+			intent.putExtra("command", msg);
 			intent.setClass(MainActivity.this, NetService.class);
 			startService(intent);
 			return true;

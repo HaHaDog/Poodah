@@ -4,26 +4,37 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 public class NetService extends Service {
 
-	private Intent intent = new Intent();
-	private String address = null;
+	private Scanner scanner = null;
 	private Exception error = null;
 	private boolean isConnecting = false;
-	private NetWorkThread netWorkThread = null;
+	private Thread netWorkThread = null;
 	private String ip;
 	private int port;
 	private boolean isSending = false;
 	private String sendMsg = null;
+	
 	@Override
-	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
+	public IBinder onBind(Intent intent) {
+		Bundle bundle = intent.getExtras();
+		String action = bundle.getString("action");
+		if(action.equals("search")){
+			
+		}else if(action.equals("connect")){
+			
+		}
 		return null;
 	}
 	
@@ -33,9 +44,11 @@ public class NetService extends Service {
 		super.onCreate();
 	}
 
-	public boolean initSocket(String ip, int port) throws IOException{
+	public boolean initSocket(String ip, int port){
 		isConnecting = true;
-		netWorkThread = new NetWorkThread();
+		this.ip = ip;
+		this.port = port;
+		netWorkThread = new Thread(new NetWork());
 		netWorkThread.start();
 		return true;
 	}
@@ -46,17 +59,19 @@ public class NetService extends Service {
 		isSending = true;
 	}
 	
-	class NetWorkThread extends Thread{
+	class NetWork implements Runnable{
 		private Socket socket = null;
 		private DataOutputStream outStream;
-		public void connect(String ip, int port) throws UnknownHostException, IOException{
-			socket = new Socket(ip,port);
-			outStream = new DataOutputStream(socket.getOutputStream());
-		}
 		public void run(){
 			try {
-				connect(ip,port);
+				long start = System.currentTimeMillis();
+				socket = new Socket(ip, port);
+				long end = System.currentTimeMillis();
+				Log.v("Time", ""+(end-start));
 				sendSuccess();
+				long end2 = System.currentTimeMillis();
+				Log.v("Time",""+(end2-end));
+				outStream = new DataOutputStream(socket.getOutputStream());
 //				out.write("st".getBytes());
 //				out.flush();
 				isConnecting = true;
@@ -82,6 +97,11 @@ public class NetService extends Service {
 					}
 					isSending = false;
 				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -95,7 +115,7 @@ public class NetService extends Service {
 	}
 	
 	public void sendSuccess(){
-		intent = new Intent();
+		Intent intent = new Intent();
 		intent.putExtra("connect", "success");
         intent.setAction("android.intent.action.MAIN");
         //service通过广播发送intent
@@ -103,7 +123,7 @@ public class NetService extends Service {
 	}
 	
 	public void sendFail(){
-		intent = new Intent();
+		Intent intent = new Intent();
 		intent.putExtra("connect", "fail");
 		if(error != null)
 		intent.putExtra("error", error.getMessage());
@@ -116,43 +136,49 @@ public class NetService extends Service {
 	 public int onStartCommand(Intent intent, int flags, int startId) {
 //		 sendSuccess();
 			Bundle bundle = intent.getExtras();
-			String key = bundle.getString("key");
-			if(key != null){
+			String action = bundle.getString("action");
+			if(action.equals("search")){
+				WifiManager wm=(WifiManager)getSystemService(Context.WIFI_SERVICE);
+			     if(!wm.isWifiEnabled())
+			         wm.setWifiEnabled(true);
+			     WifiInfo wi=wm.getConnectionInfo();
+			     int ipAdd=wi.getIpAddress();
+			     String ip=intToIp(ipAdd);
+				scanner = new Scanner(ip);
+				try {
+					scanner.scan();
+					ArrayList<String> avaliablIpList = scanner.getAvaliableIpList();
+					sendList(avaliablIpList);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					error = new Exception("扫描被终止");
+					sendFail();
+				}				
+			}else if(action.equals("connect")){
+				String ip = bundle.getString("ip");
+				int port = bundle.getInt("port");
+				initSocket(ip, port);
+			}else if(action.equals("command")){
 				isSending = true;
-				sendMsg = key;
-				return  super.onStartCommand(intent, flags, startId);
+				sendMsg = bundle.getString("command");
+			}else if(action.equals("password")){
+				String password = bundle.getString("password");
 			}
-			address = bundle.getString("address");
-			
-			if(address==null){
-				return super.onStartCommand(intent, flags, startId);
-			}
-			boolean flag = false;
-			
-			try {
-				error = null;
-				if(address.contains(":")){
-					String[] list = address.split(":");
-					ip = list[0];
-					port = Integer.parseInt(list[1]);
-					flag = this.initSocket(ip,port);
-					flag = true;
-				}else{
-					error = new Exception("错误的IP地址：没有指定端口号");
-				}
-			} 
-			catch (UnknownHostException e){
-				e.printStackTrace();
-				error = new Exception("UnknownHost");
-			}catch (IOException e){
-				e.printStackTrace();
-				if(error==null)error = new Exception("IOException");
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				if(error == null)error = new Exception("Exception");
-			}   
 	        return super.onStartCommand(intent, flags, startId);
 	    }
+	 
+	 private String intToIp(int i) {
+		 return (i & 0xFF ) + "." +
+			     ((i >> 8 ) & 0xFF) + "." +
+			     ((i >> 16 ) & 0xFF) + "." +
+			     ( i >> 24 & 0xFF) ;
+	}
+
+	public void sendList(ArrayList<String> list) {
+		Intent intent = new Intent();
+		intent.putExtra("list", list.toString());
+        intent.setAction("android.intent.action.MAIN");
+        sendBroadcast(intent);
+	}
 
 }
