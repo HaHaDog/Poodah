@@ -2,6 +2,7 @@ package com.poodah;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ public class ConnectActivity extends Activity {
 	private String lastPort;
 	private EditText ipText = null;
 	private EditText portText = null;
+	private ProgressDialog progressDialog = null;
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -52,7 +54,7 @@ public class ConnectActivity extends Activity {
 				intent.putExtra("port", Integer.parseInt(port));
 				intent.setClass(ConnectActivity.this, NetService.class);
 				startService(intent);
-				
+				waitForConnect();
 				//将连接设置到历史记录中
 				updateHistory();
 			}
@@ -60,6 +62,11 @@ public class ConnectActivity extends Activity {
 		
 	}
 
+	public void waitForConnect(){
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setTitle("请稍候");
+		progressDialog.show();
+	}
 	public void sendMessage(String name, String value){
 		Intent intent = new Intent();
 		intent.putExtra("action", "connect");
@@ -92,7 +99,9 @@ public class ConnectActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            
+            if(progressDialog != null){
+            	progressDialog.dismiss();
+            }
             Bundle bundle = intent.getExtras();
             String connect = bundle.getString("connect");
             if(connect != null && connect.equals("success")){
