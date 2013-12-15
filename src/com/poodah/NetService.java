@@ -163,6 +163,10 @@ public class NetService extends Service {
 				sendMsg = bundle.getString("command");
 			}else if(action.equals("password")){
 				String password = bundle.getString("password");
+			}else if(action.equals("cancel")){
+				isConnecting = false;
+				isSending = false;
+				netWorkThread.interrupt();
 			}
 	        return super.onStartCommand(intent, flags, startId);
 	    }

@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -65,6 +67,17 @@ public class ConnectActivity extends Activity {
 	public void waitForConnect(){
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setTitle("请稍候");
+		progressDialog.setMessage("正在连接...");
+		progressDialog.setOnCancelListener(new OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				Intent i = new Intent();
+				i.setClass(ConnectActivity.this, NetService.class);
+				i.putExtra("action", "cancel");
+				startService(i);
+			}
+		});
 		progressDialog.show();
 	}
 	public void sendMessage(String name, String value){
