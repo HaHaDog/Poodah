@@ -23,6 +23,9 @@ public class ConnectActivity extends Activity {
 	private EditText ipText = null;
 	private EditText portText = null;
 	private ProgressDialog progressDialog = null;
+	private String warn;
+	private String ok;
+	private String gotoMain;
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -38,16 +41,25 @@ public class ConnectActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		regist();
 		this.setContentView(R.layout.connect);
+		initString();
 		ipText = (EditText)findViewById(R.id.editText1);
 		portText = (EditText)findViewById(R.id.editText2);
 		connect = (ImageButton)findViewById(R.id.themeBtn);
 		
-		// ÏÔÊ¾ÉÏ´ÎÁ¬½ÓµÄÉèÖÃ
+		// ï¿½ï¿½Ê¾ï¿½Ï´ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½
 		init();
 		connect.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				if(ipText.getText() == null || ipText.getText().length() == 0){
+					alert(getResources().getString(R.string.pleaseInputIp));
+					return;
+				}
+				if(portText.getText() == null || portText.getText().length() == 0){
+					alert(getResources().getString(R.string.pleaseInputPort));
+					return;
+				}
 				String ip = ipText.getText().toString();
 				String port = portText.getText().toString();
 				Intent intent = new Intent();
@@ -57,17 +69,24 @@ public class ConnectActivity extends Activity {
 				intent.setClass(ConnectActivity.this, NetService.class);
 				startService(intent);
 				waitForConnect();
-				//½«Á¬½ÓÉèÖÃµ½ÀúÊ·¼ÇÂ¼ÖÐ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Ê·ï¿½ï¿½Â¼ï¿½ï¿½
 				updateHistory();
 			}
 		});
 		
 	}
+	
+	public void initString()
+	{
+		warn = getResources().getString(R.string.warn);
+		ok = getResources().getString(R.string.OK);
+		gotoMain = getResources().getString(R.string.gotoMain);
+	}
 
 	public void waitForConnect(){
 		progressDialog = new ProgressDialog(this);
-		progressDialog.setTitle("ÇëÉÔºò");
-		progressDialog.setMessage("ÕýÔÚÁ¬½Ó...");
+		progressDialog.setTitle(getResources().getString(R.string.waitTitle));
+		progressDialog.setMessage(getResources().getString(R.string.connecting));
 		progressDialog.setOnCancelListener(new OnCancelListener() {
 			
 			@Override
@@ -80,6 +99,13 @@ public class ConnectActivity extends Activity {
 		});
 		progressDialog.show();
 	}
+	
+	public void gotoMainActivity(){
+		Intent i = new Intent();
+		i.setClass(ConnectActivity.this, MainActivity.class);
+		startActivity(i);
+	}
+	
 	public void sendMessage(String name, String value){
 		Intent intent = new Intent();
 		intent.putExtra("action", "connect");
@@ -89,22 +115,36 @@ public class ConnectActivity extends Activity {
 	}
 	
 	public void regist(){
-		//ÒòÎª¸ÃactivityÒª½ÓÊÕ¹ã²¥ÏûÏ¢£¬ËùÒÔÏÈ¶¥Ò»¸öÒ»¸ö½ÓÊÕÆ÷¶ÔÏó
-        //¸Ã¶ÔÏó×Ô¼ºÊµÏÖ£¬ÊÇ¼Ì³ÐBroadcastReceiverµÄ
+        //ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½Êµï¿½Ö£ï¿½ï¿½Ç¼Ì³ï¿½BroadcastReceiverï¿½ï¿½
         receiver=new MyReceiver();
-        //¶¨ÒåÒ»¸öIntentFilterµÄ¶ÔÏó£¬À´¹ýÂËµôÒ»Ð©intent
+        //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½IntentFilterï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½Ò»Ð©intent
         IntentFilter filter = new IntentFilter();
-        //Ö»½ÓÊÕ·¢ËÍµ½actionÎª"android.intent.action.MAIN"µÄintent
-//        "android.intent.action.MAIN"ÊÇÔÚMainFestÖÐ¶¨ÒåµÄ
+//        "android.intent.action.MAIN"ï¿½ï¿½ï¿½ï¿½MainFestï¿½Ð¶ï¿½ï¿½ï¿½ï¿½
         filter.addAction("android.intent.action.MAIN");
-        //Æô¶¯¹ã²¥½ÓÊÕÆ÷
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ã²¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         ConnectActivity.this.registerReceiver(receiver, filter);
 	}
 	public void alert(String msg){
 		new AlertDialog.Builder(this)
-		.setTitle("¾¯¸æ")
+		.setTitle(warn)
 		.setMessage(msg)
-		.setPositiveButton("È·¶¨", null)
+		.setPositiveButton(getResources().getString(R.string.OK), null)
+		.show();
+	}
+	
+	public void ErrorMsg(String msg){
+		new AlertDialog.Builder(this)
+		.setTitle(warn)
+		.setMessage(msg)
+		.setPositiveButton(ok, null)
+		.setNegativeButton(gotoMain, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				gotoMenu();
+			}
+		})
 		.show();
 	}
 	
@@ -124,7 +164,7 @@ public class ConnectActivity extends Activity {
             }else{
             	String error = bundle.getString("error");
 //            	gotoMenu();
-            	alert(error);
+            	ErrorMsg(error);
 //            	Intent intent2 = new Intent();
 //            	intent.setClass(ConnectActivity.this, SettingsActivity.class);
 //            	startActivity(intent2);
@@ -136,6 +176,7 @@ public class ConnectActivity extends Activity {
 		Intent intent = new Intent();
 		intent.setClass(ConnectActivity.this, MenuActivity.class);
 		startActivity(intent);
+		overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 	}
 	public void test(){
 		Intent intent = new Intent();
