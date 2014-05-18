@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/settings_bg"
+    android:gravity="left"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="124dp"
+        android:text="按键震动"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="41dp" />
+
+    <CheckBox
+        android:id="@+id/CheckBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkBox1"
+        android:layout_below="@+id/checkBox1"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/CheckBox2"
+        android:layout_alignBottom="@+id/CheckBox2"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_marginTop="20dp"
+        android:text="按键声音"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/themeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignRight="@+id/CheckBox2"
+        android:layout_below="@+id/CheckBox2"
+        android:layout_marginTop="19dp"
+        android:background="@drawable/theme_btn_ic" />
+
+    <ImageButton
+        android:id="@+id/aboutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/themeBtn"
+        android:layout_alignRight="@+id/themeBtn"
+        android:layout_below="@+id/themeBtn"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/about_btn_ic" />
+
+</RelativeLayout>
